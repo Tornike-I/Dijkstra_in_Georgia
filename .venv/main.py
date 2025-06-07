@@ -6,6 +6,8 @@ if __name__ == "__main__":
     georgia.add_new_node("Kutaisi")
     georgia.add_connection("Tbilisi", "Kutaisi", 15)
     georgia.add_connection("Gudauri", "Tbilisi", 5)
-    georgia.add_connection("Gudauri", "Kutaisi", 25)
+    georgia.add_connection("Gudauri", "Kutaisi", 9)
 
     print(georgia)
+
+    print(georgia.dijkstra("Tbilisi", "Kutaisi"))

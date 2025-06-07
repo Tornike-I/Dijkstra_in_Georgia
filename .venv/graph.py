@@ -1,3 +1,5 @@
+import heapq
+
 class Node:
     def __init__(self, label):
         self.label = label
@@ -6,7 +8,7 @@ class Node:
         edge = Edge(cost)
         self.adjacency[node] = edge
 
-class Edge:
+class Edge: # class for future scaling, storing information about road damage, accessability, etc.
     def __init__(self, cost):
         self.cost = cost
 
@@ -27,6 +29,43 @@ class Map:
         node2 = self.lookup_node(node2_label)
         node1.add_connection(node2, cost)
         node2.add_connection(node1, cost) # Adding connection for both nodes as the graph is undirected
+
+    def dijkstra(self, start_label, end_label):
+        start = self.nodes.get(start_label)
+        end = self.nodes.get(end_label)
+        if start is None or end is None:
+            raise ValueError("Start or end node not found in the map.")
+
+        distances = {start: 0}
+        previous = {} # To reconstruct path for displaying
+        heap = [(0, start)]
+        visited = set()
+
+        while heap:
+            current_dist, current_node = heapq.heappop(heap)
+            if current_node in visited:
+                continue
+            visited.add(current_node)
+
+            if current_node == end:
+                # Reconstruct path
+                path = []
+                while current_node:
+                    path.append(current_node.label)
+                    current_node = previous.get(current_node)
+                path.reverse()
+                return current_dist, path
+
+            for neighbor, edge in current_node.adjacency.items():
+                if neighbor in visited:
+                    continue
+                new_dist = current_dist + edge.cost
+                if new_dist < distances.get(neighbor, float('inf')):
+                    distances[neighbor] = new_dist
+                    previous[neighbor] = current_node
+                    heapq.heappush(heap, (new_dist, neighbor))
+
+        return float('inf'), [] # In case a path does not exist
 
     def __repr__(self):
         output = ""
