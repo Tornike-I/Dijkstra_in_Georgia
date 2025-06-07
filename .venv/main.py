@@ -48,4 +48,4 @@ if __name__ == "__main__":
     georgia.add_connection("Mestia", "Ambrolauri", 24)
     georgia.add_connection("Mestia", "Zugdidi", 32)
 
-    print(georgia.dijkstra("Marneuli", "Batumi"))
+    print(georgia.dijkstra("Dedoplistskaro", "Mestia"))
